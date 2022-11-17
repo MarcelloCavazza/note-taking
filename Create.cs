@@ -12,33 +12,32 @@ using MySql.Data.MySqlClient;
 
 namespace note_taking
 {
-    public partial class Form1 : Form
+    public partial class Create : Form
     {
-        private String title, description;
-        public Form1()
+        private String description, title;
+        private DBConnection connection = new DBConnection(); 
+        public Create()
         {
             InitializeComponent();
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            String cs = @"server=localhost;userid=root;password=;database=notes";
-            String query = $"insert into note values(null, '{this.title}', '{this.description}', CURRENT_TIMESTAMP, null)";
-            MySqlConnection conn = new MySqlConnection(cs);
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = conn;
-            cmd.CommandText = query;
-            cmd.ExecuteNonQuery();
-
+            connection.CreateNote(this.title, this.description);
             MessageBox.Show("Task created");
-            conn.Close();
 
         }
 
         private void rTxtDescription_TextChanged(object sender, EventArgs e)
         { 
             this.description = rTxtDescription.Text.ToString();
+        }
+
+        private void btnReturn_Click(object sender, EventArgs e)
+        {
+            var createForm = new InitialScreen();
+            createForm.Show();
+            this.Hide();
         }
 
         private void txtTitle_TextChanged(object sender, EventArgs e)
